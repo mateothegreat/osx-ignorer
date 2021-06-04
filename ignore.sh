@@ -21,8 +21,10 @@ usage() {
   echo ""
   echo "  -b, --base-path     ${LIGHT_GRAY}Base directory to search under.${RESET}"
   echo "  -e, --exclude-path  ${LIGHT_GRAY}Path to exclude.${RESET}"
+  echo "  -f, --exclude-file  ${LIGHT_GRAY}File to get base dirrectory from to then exclude.${RESET}"
+  echo "  -d, --exclude-dir   ${LIGHT_GRAY}Directory name local to --exclude-file to then exclude.${RESET}"
   echo ""
-  echo "Example: ${LIGHT_BLUE}$0 --base-path ~/projects${RESET}"
+  echo "Example: ${LIGHT_BLUE}$0 --base-path ~/projects --exclude-path /some/path/venv${RESET}"
 
   exit 1
 
@@ -54,7 +56,15 @@ remove_all() {
 
 exclude_one() {
 
-  _EXCLUDE_PATH=$(dirname ${EXCLUDE_PATH})
+  if [ -z "$EXCLUDE_FILE" ]; then
+
+    _EXCLUDE_PATH=$EXCLUDE_PATH
+
+  else
+
+    _EXCLUDE_PATH="$(dirname "${EXCLUDE_FILE}")/${EXCLUDE_DIR}"
+
+  fi
 
   if [ -d "$_EXCLUDE_PATH" ] && ! tmutil isexcluded "$_EXCLUDE_PATH" | grep -q '\[Excluded\]'; then
 
@@ -81,15 +91,19 @@ apply_all() {
       IGNORE_FILE="${CONFIG[0]}"
       IGNORE_PATH="${CONFIG[1]}"
 
-      echo "Searching for \"${IGNORE_FILE}\" under \"${IGNORE_PATH}\".."
+      echo
+      echo "Searching for the file \"${LIGHT_BLUE}${IGNORE_FILE}${RESET}\" under \"${LIGHT_GRAY}${IGNORE_PATH}${RESET}\" to ignore it's base directory.."
+      echo
 
       find "${BASE_PATH}" -name "${IGNORE_FILE}" -type f -and \
-        \( -not -path "*/${IGNORE_PATH}/*" -and -not -path '/code/*' \) \
+        \( -not -path "*/${IGNORE_PATH}/*" \) \
         -maxdepth 5 \
         -exec "${0}" \
         "--base-path" \
         "${BASE_PATH}" \
-        "--exclude-path" \
+        "--exclude-dir" \
+        "${IGNORE_PATH}" \
+        "--exclude-file" \
         "{}" \
         "exclude" \;
 
@@ -97,7 +111,18 @@ apply_all() {
 
       IGNORE_PATH="${CONFIG[0]}"
 
-      echo "Finding \"${IGNORE_PATH}\" under \"${BASE_PATH}\""
+      echo
+      echo "Finding directories matching \"${LIGHT_BLUE}${IGNORE_PATH}${RESET}\" under \"${LIGHT_GRAY}${BASE_PATH}${RESET}\".."
+      echo
+
+      find "${BASE_PATH}" -name "${IGNORE_PATH}" -type d \
+        -maxdepth 5 \
+        -exec "${0}" \
+        "--base-path" \
+        "${BASE_PATH}" \
+        "--exclude-path" \
+        "{}" \
+        "exclude" \;
 
     fi
 
@@ -117,6 +142,16 @@ while [ "$#" -gt 0 ]; do case $1 in
     ;;
   -e | --exclude-path)
     EXCLUDE_PATH="$2"
+    shift
+    shift
+    ;;
+  -f | --exclude-file)
+    EXCLUDE_FILE="$2"
+    shift
+    shift
+    ;;
+  -d | --exclude-dir)
+    EXCLUDE_DIR="$2"
     shift
     shift
     ;;
