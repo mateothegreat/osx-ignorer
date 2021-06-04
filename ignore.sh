@@ -134,7 +134,14 @@ apply_all() {
 # Parse arguments
 #
 while [ "$#" -gt 0 ]; do case $1 in
-
+  list)
+    list
+    exit 0
+    ;;
+  removeall)
+    remove_all
+    exit 0
+    ;;
   -b | --base-path)
     BASE_PATH="$2"
     shift
@@ -157,9 +164,7 @@ while [ "$#" -gt 0 ]; do case $1 in
     ;;
   *)
     case "$1" in
-    list) list ;;
     exclude) exclude_one ;;
-    removeall) remove_all ;;
     apply) apply_all ;;
     esac
     break

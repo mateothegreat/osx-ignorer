@@ -1,3 +1,6 @@
+[![asciicast](https://asciinema.org/a/ntpzTxExuMLr1YDfQC3x2yyyD.png)](https://asciinema.org/a/ntpzTxExuMLr1YDfQC3x2yyyD)
+
+
 ## List all ignores
 
 ```bash
