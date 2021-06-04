@@ -23,7 +23,7 @@ Example: ./ignore.sh --base-path ~/projects --exclude-path /some/path/venv
 ## Configuration
 Define your exclusions in the ignores_paths.txt file with the pattern:
 
-`<file to match>:<relative directory to exclude>
+`<file to match>:<relative directory to exclude>`
 
 or just
 
@@ -38,7 +38,26 @@ requirements.txt:venv
 ## Ignore node_modules and venv from base path
 
 ```bash
-./ignore.sh --base-path ~/myprojectsroot apply
+➜  osx-timemachine-ignorer git:(main) ✗ ./ignore.sh --base-path ~/workspace/sp apply  
+
+Finding directories matching "venv" under "/Users/yomateo/workspace/sp"..
+
+  👉 /Users/yomateo/workspace/sp/infra/streaming-setup/venv has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/streaming-producer/venv has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/streaming-consumer/venv has been excluded from Time Machine backups
+
+Searching for the file "package.json" under "node_modules" to ignore it's base directory..
+
+  👉 /Users/yomateo/workspace/sp/infra/action-deploy/node_modules has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/frontends/app/node_modules has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/frontends/signup/node_modules has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/node_modules has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/services/rbac/node_modules has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/services/models/node_modules has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/services/cameras/node_modules has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/services/models.wtf/node_modules has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/services/partners/node_modules has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/services/kubernetes/node_modules has been excluded from Time Machine backups
 ```
 
 ## List all ignores
