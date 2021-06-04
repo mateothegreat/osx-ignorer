@@ -46,6 +46,20 @@ Finding directories matching "venv" under "/Users/yomateo/workspace/sp"..
   👉 /Users/yomateo/workspace/sp/infra/streaming-producer/venv has been excluded from Time Machine backups
   👉 /Users/yomateo/workspace/sp/infra/streaming-consumer/venv has been excluded from Time Machine backups
 
+Finding directories matching ".terraform" under "/Users/yomateo/workspace/sp"..
+
+  👉 /Users/yomateo/workspace/sp/infra/cluster/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/test/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/rollout/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/cloud/gcp/gke/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/tf/eks-cluster/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/tf/operators/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/tf/ingress-controller/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/tf/github/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/tf/eks/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/tf/github-actions-runners/.terraform has been excluded from Time Machine backups
+  👉 /Users/yomateo/workspace/sp/infra/tf/services/.terraform has been excluded from Time Machine backups
+
 Searching for the file "package.json" under "node_modules" to ignore it's base directory..
 
   👉 /Users/yomateo/workspace/sp/infra/action-deploy/node_modules has been excluded from Time Machine backups

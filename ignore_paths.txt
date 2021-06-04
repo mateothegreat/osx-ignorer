@@ -1,2 +1,3 @@
 venv
+.terraform
 package.json:node_modules
