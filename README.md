@@ -63,12 +63,45 @@ Searching for the file "package.json" under "node_modules" to ignore it's base d
 ## List all ignores
 
 ```bash
-mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
+➜  osx-timemachine-ignorer git:(main) ./ignore.sh list
+/Users/yomateo/workspace/sp/services/cameras/node_modules
+/Users/yomateo/workspace/sp/services/partners/node_modules
+/Users/yomateo/workspace/sp/services/kubernetes/node_modules
+/Users/yomateo/workspace/sp/services/rbac/node_modules
+/Users/yomateo/workspace/sp/services/models.wtf/node_modules
+/Users/yomateo/workspace/sp/node_modules
+/Users/yomateo/workspace/sp/services/models/node_modules
+/Users/yomateo/workspace/sp/frontends/app/node_modules
+/Users/yomateo/workspace/sp/frontends/signup/node_modules
+/Users/yomateo/workspace/sp/infra/streaming-consumer/venv
+/Users/yomateo/workspace/sp/infra/action-deploy/node_modules
+/Users/yomateo/workspace/sp/infra/streaming-setup/venv
+/Users/yomateo/workspace/sp/infra/streaming-producer/venv
+/Users/yomateo/workspace/osx-timemachine-ignorer/test/venv
+/Users/yomateo/Library/Passes/ScheduledActivities.archive
+/Users/yomateo/Library/Containers/com.docker.docker/Data/vms/0/data
+/Users/yomateo/Library/Containers/com.docker.docker
 ```
 
 ## Remove all ignores
 ```bash
-IFS=$'\n'; for FF in $(mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"); do echo "${FF}"; tmutil removeexclusion "${FF}"; done
+➜  osx-timemachine-ignorer git:(main) ./ignore.sh removeall
+👉 Removing all exclusions from time machine..
+/Users/yomateo/workspace/sp/services/cameras/node_modules
+/Users/yomateo/workspace/sp/services/partners/node_modules
+/Users/yomateo/workspace/sp/services/kubernetes/node_modules
+/Users/yomateo/workspace/sp/services/rbac/node_modules
+/Users/yomateo/workspace/sp/services/models.wtf/node_modules
+/Users/yomateo/workspace/sp/node_modules
+/Users/yomateo/workspace/sp/services/models/node_modules
+/Users/yomateo/workspace/sp/frontends/app/node_modules
+/Users/yomateo/workspace/sp/frontends/signup/node_modules
+/Users/yomateo/workspace/sp/infra/streaming-consumer/venv
+/Users/yomateo/workspace/sp/infra/action-deploy/node_modules
+/Users/yomateo/workspace/sp/infra/streaming-setup/venv
+/Users/yomateo/workspace/sp/infra/streaming-producer/venv
+/Users/yomateo/workspace/osx-timemachine-ignorer/test/venv
+/Users/yomateo/Library/Passes/ScheduledActivities.archive
+/Users/yomateo/Library/Containers/com.docker.docker/Data/vms/0/data
+/Users/yomateo/Library/Containers/com.docker.docker
 ```
-## Find root node_modules
-Skip nested node_modules and get the root:
