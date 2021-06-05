@@ -14,7 +14,7 @@ usage() {
   if [ -z "$BASE_PATH" ]; then echo "${RED}👉 Base path not set!${RESET}"; fi
   if [ -z "$CONFIG_PATH" ]; then echo "${RED}👉 Configuration file does not exist!${RESET}"; fi
 
-  echo "Usage: ${LIGHT_CYAN}$0 [-c config-path] [-b base-path]${RESET}"
+  echo "Usage: ${LIGHT_CYAN}$0 [-c config-path] [-b base-path] [list|apply|exclude|removeall|reindex]${RESET}"
   echo ""
   echo "  -c, --config        ${LIGHT_GRAY}Path to .timemachine_ignore configuration file.${RESET}"
   echo "  -b, --base-path     ${LIGHT_GRAY}Base directory to search under.${RESET}"

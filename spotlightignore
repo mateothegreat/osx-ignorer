@@ -14,7 +14,7 @@ usage() {
 
   if [ -z "$BASE_PATH" ]; then echo "${RED}👉 Base path not set!${RESET}"; fi
 
-  echo "Usage: ${LIGHT_CYAN}$0 [-c config-path] [db exclude-dir]${RESET}"
+  echo "Usage: ${LIGHT_CYAN}$0 [-c config-path] [-d exclude-dir] [apply|removeall|reindex]${RESET}"
   echo ""
   echo "  -b, --base-path     ${LIGHT_GRAY}Base directory to search under.${RESET}"
   echo "  -d, --exclude-dir   ${LIGHT_GRAY}Directory name to exclude.${RESET}"

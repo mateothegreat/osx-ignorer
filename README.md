@@ -1,9 +1,15 @@
-## Manage time machine exclusions like a boss.
+## Manage osx exclusions like a boss.
 
-This cli will allow you to easily add exclusions to time machine to
-block things like `node_modules` or `venv` directories by traversing the
-file system for matching patterns defined in
+This cli will allow you to easily add exclusions to time machine and
+spotlight to block things like `node_modules` or `venv` directories by
+traversing the file system for matching patterns defined in
 [ingore_paths.txt](ignore-paths.txt).
+
+The following tools are included:
+
+* `tmignore` - Add exclusions to time machine.
+* `spotlightignore` - Add exclusions to spotlight to prevent indexing.
+
 
 [![asciicast](https://asciinema.org/a/ntpzTxExuMLr1YDfQC3x2yyyD.png)](https://asciinema.org/a/ntpzTxExuMLr1YDfQC3x2yyyD)
 
