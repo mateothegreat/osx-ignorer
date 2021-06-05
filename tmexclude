@@ -11,20 +11,18 @@ LIGHT_GRAY='\033[0;37m'
 
 usage() {
 
-  if [ -n "$BASE_PATH" ]; then
+  if [ -z "$BASE_PATH" ]; then echo "${RED}👉 Base path not set!${RESET}"; fi
+  if [ -z "$CONFIG_PATH" ]; then echo "${RED}👉 Configuration file does not exist!${RESET}"; fi
 
-    echo "\n${RED}👉 $1${RESET}\n"
-
-  fi
-
-  echo "Usage: ${LIGHT_CYAN}$0 [-b base-path]${RESET}"
+  echo "Usage: ${LIGHT_CYAN}$0 [-c config-path] [-b base-path]${RESET}"
   echo ""
+  echo "  -c, --config        ${LIGHT_GRAY}Path to .timemachine_ignore configuration file.${RESET}"
   echo "  -b, --base-path     ${LIGHT_GRAY}Base directory to search under.${RESET}"
   echo "  -e, --exclude-path  ${LIGHT_GRAY}Path to exclude.${RESET}"
   echo "  -f, --exclude-file  ${LIGHT_GRAY}File to get base dirrectory from to then exclude.${RESET}"
   echo "  -d, --exclude-dir   ${LIGHT_GRAY}Directory name local to --exclude-file to then exclude.${RESET}"
   echo ""
-  echo "Example: ${LIGHT_BLUE}$0 --base-path ~/projects --exclude-path /some/path/venv${RESET}"
+  echo "Example: ${LIGHT_BLUE}$0 --config ~/.timemachine_ignore --base-path ~/projects --exclude-path /some/path/venv${RESET}"
 
   exit 1
 
@@ -35,7 +33,23 @@ usage() {
 #
 list() {
 
-  mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
+  echo
+  echo "The following path(s) are currently excluded from time machine:"
+  echo
+
+  n=0
+
+  for P in $(mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'" | sort); do
+
+    n=$(($n+1))
+
+    echo "    ${n}. ✅  ${LIGHT_BLUE}${P}${RESET}"
+
+  done
+
+  echo
+  echo "Total paths excluded: ${LIGHT_CYAN}${n}${RESET}"
+  echo
 
 }
 
@@ -49,7 +63,7 @@ remove_all() {
   IFS=$'\n'
   for FF in $(mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"); do
     echo "${FF}"
-    tmutil removeexclusion "${FF}"
+    sudo tmutil removeexclusion "${FF}"
   done
 
 }
@@ -68,7 +82,7 @@ exclude_one() {
 
   if [ -d "$_EXCLUDE_PATH" ] && ! tmutil isexcluded "$_EXCLUDE_PATH" | grep -q '\[Excluded\]'; then
 
-    tmutil addexclusion "${_EXCLUDE_PATH}"
+    sudo tmutil addexclusion -p "${_EXCLUDE_PATH}"
 
     echo "  👉 ${LIGHT_GREEN}${_EXCLUDE_PATH}${RESET} has been excluded from Time Machine backups"
 
@@ -82,7 +96,7 @@ exclude_one() {
 
 apply_all() {
 
-  for P in $(cat ignore_paths.txt); do
+  for P in $(cat "${CONFIG_PATH}"); do
 
     CONFIG=(${P//:/ })
 
@@ -130,17 +144,21 @@ apply_all() {
 
 }
 
+spotlight_reindex() {
+
+  sudo mdutil -E /
+
+}
+
 #
 # Parse arguments
 #
 while [ "$#" -gt 0 ]; do case $1 in
-  list)
-    list
-    exit 0
-    ;;
-  removeall)
-    remove_all
-    exit 0
+
+  -c | --config)
+    CONFIG_PATH="$2"
+    shift
+    shift
     ;;
   -b | --base-path)
     BASE_PATH="$2"
@@ -162,13 +180,32 @@ while [ "$#" -gt 0 ]; do case $1 in
     shift
     shift
     ;;
-  *)
-    case "$1" in
-    exclude) exclude_one ;;
-    apply) apply_all ;;
-    esac
-    break
+  list)
+    list
+    exit 0
     ;;
+  exclude)
+    exclude_one
+    exit 0
+    ;;
+  removeall)
+    remove_all
+    exit 0
+    ;;
+  reindex)
+    spotlight_reindex
+    exit 0
+    ;;
+  apply)
+    apply_all
+    exit 0
+    ;;
+  *)
+    echo $1
+    break;;
   esac done
 
-if [ -z "$BASE_PATH" ]; then usage "base path is not set"; fi
+#
+# Required arguments.
+#
+if [ -z "$BASE_PATH" ] || [ -z "$CONFIG_PATH" ]; then usage; fi

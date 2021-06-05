@@ -1,0 +1,115 @@
+#!/bin/sh
+
+
+RESET='\033[0m'
+RED='\033[0;31m'
+LIGHT_RED='\033[1;31m'
+LIGHT_GREEN='\033[1;32m'
+LIGHT_BLUE='\033[1;34m'
+LIGHT_PURPLE='\033[1;35m'
+LIGHT_CYAN='\033[1;36m'
+LIGHT_GRAY='\033[0;37m'
+
+usage() {
+
+  if [ -z "$BASE_PATH" ]; then echo "${RED}👉 Base path not set!${RESET}"; fi
+
+  echo "Usage: ${LIGHT_CYAN}$0 [-c config-path] [db exclude-dir]${RESET}"
+  echo ""
+  echo "  -b, --base-path     ${LIGHT_GRAY}Base directory to search under.${RESET}"
+  echo "  -d, --exclude-dir   ${LIGHT_GRAY}Directory name to exclude.${RESET}"
+  echo ""
+  echo "Example: ${LIGHT_BLUE}$0 --base-path ~/workspace --exclude-dir node_modules apply${RESET}"
+
+  exit 1
+
+}
+
+apply_all() {
+
+  find "${BASE_PATH}" -type d -name "${EXCLUDE_DIR}" | while read -r D; do
+
+    if [ $(grep -o "${EXCLUDE_DIR}" <<< "${D}" | grep ""  -c) == 1 ]; then
+
+      if [ -f "${D}/.metadata_never_index" ]; then
+
+        echo "❣️ ${LIGHT_GRAY}.metadata_never_index${RESET} already exists in ${LIGHT_BLUE}${D}${RESET}"
+
+      else
+
+        echo "✅ added ${LIGHT_BLUE}.metadata_never_index${RESET} to ${LIGHT_GREEN}${D}${RESET}"
+        touch "${D}/.metadata_never_index"
+
+      fi
+
+    fi
+
+  done
+
+}
+
+remove_ignore() {
+
+  find "${BASE_PATH}" -type f -name .metadata_never_index | while read -r F; do
+
+    echo "🗑 Removed ${LIGHT_GRAY}.metadata_never_index${RESET} from ${LIGHT_CYAN}${F}${RESET}"
+
+    rm -f "${F}"
+
+  done
+
+}
+
+
+#
+# Parse arguments
+#
+while [ "$#" -gt 0 ]; do case $1 in
+
+  -c | --config)
+    CONFIG_PATH="$2"
+    shift
+    shift
+    ;;
+  -b | --base-path)
+    BASE_PATH="$2"
+    shift
+    shift
+    ;;
+  -e | --exclude-path)
+    EXCLUDE_PATH="$2"
+    shift
+    shift
+    ;;
+  -f | --exclude-file)
+    EXCLUDE_FILE="$2"
+    shift
+    shift
+    ;;
+  -d | --exclude-dir)
+    EXCLUDE_DIR="$2"
+    shift
+    shift
+    ;;
+  apply)
+    apply_all
+    exit 0
+    ;;
+  removeall)
+    remove_ignore
+    exit 0
+    ;;
+  reindex)
+    spotlight_reindex
+    exit 0
+    ;;
+  *)
+    break
+
+  esac done
+
+#
+# Required arguments.
+#
+if [ -z "$BASE_PATH" ] || [ -z "$CONFIG_PATH" ]; then usage; fi
+

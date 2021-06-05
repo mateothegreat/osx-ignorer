@@ -10,8 +10,9 @@ file system for matching patterns defined in
 ## Usage
 
 ```bash
-Usage: ./ignore.sh [-b base-path]
+Usage: ./ignore.sh [-c ignore_paths.txt] [-b base-path]
 
+  -c, --confg         Path to the config txt file.
   -b, --base-path     Base directory to search under.
   -e, --exclude-path  Path to exclude.
   -f, --exclude-file  File to get base dirrectory from to then exclude.
@@ -118,4 +119,9 @@ Searching for the file "package.json" under "node_modules" to ignore it's base d
 /Users/yomateo/Library/Passes/ScheduledActivities.archive
 /Users/yomateo/Library/Containers/com.docker.docker/Data/vms/0/data
 /Users/yomateo/Library/Containers/com.docker.docker
+```
+
+## Reindex spot light
+```bash
+➜  osx-timemachine-ignorer git:(main) ./ignore.sh reindex
 ```
